@@ -1,0 +1,16 @@
+using HorizonSideRobots
+
+
+function Krest!(r)  
+        side=Nord
+        num_steps_along!(r,side,num_steps)
+        reverse(side)
+end
+
+function num_steps_along!(r,side,num_steps)
+    while !isborder(r,side)
+        move!(r,side)
+        putmarker!(r)
+    end
+    putmarker!(r)
+end
