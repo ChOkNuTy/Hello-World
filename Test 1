@@ -1,19 +1,16 @@
 using HorizonSideRobots
 
+function Task№1(r)
+    for side in (Nord,West,Sud,Ost)
+    num_steps = along!(r,side)
+    inverse(side)
+    along!(r,side,num_steps)
+    num_steps = along!(r,side)
+    inverse(side)
+    along!(r,side,num_steps)
 
-function Krest!(r)  
-        side=Nord
-        num_steps_along!(r,side,num_steps)
-        reverse(side)
 end
 
-function num_steps_along!(r,side,num_steps)
-    while !isborder(r,side)
-        move!(r,side)
-        putmarker!(r)
-    end
-    putmarker!(r)
-end
 
 function inverse(side::HorizonSide)::HorizonSide
     if side==Nord
@@ -26,3 +23,30 @@ function inverse(side::HorizonSide)::HorizonSide
         return West
     end
 end
+
+function along!(r,side)
+    c=0
+    while !isborder(r)
+        putmarker!(r)
+        move!(r,side) 
+        c+=1       
+    end
+    putmarker!(r)
+    return c
+end
+
+function num_steps_along!(r,side)
+    num_steps =0
+    while !isborder(r)
+        move!(r,side)
+        num_steps +=1
+    end
+    return num_steps
+end
+
+function along!(r,side,num_steps)
+    for _ in 1:num_steps
+        move!(r,side)
+end
+
+
