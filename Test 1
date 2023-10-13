@@ -1,32 +1,40 @@
 using HorizonSideRobots
 
 function Task№1(r)
-    for side in (Nord,West,Sud,Ost)
+    side=Ost
     num_steps = along!(r,side)
-    inverse(side)
+    side=inverse(side)
     along!(r,side,num_steps)
+    side=West
     num_steps = along!(r,side)
-    inverse(side)
+    side=inverse(side)
     along!(r,side,num_steps)
-
+    side=Sud
+    num_steps = along!(r,side)
+    side=inverse(side)
+    along!(r,side,num_steps)
+    side=Nord
+    num_steps = along!(r,side)
+    side=inverse(side)
+    along!(r,side,num_steps)
 end
 
 
 function inverse(side::HorizonSide)::HorizonSide
     if side==Nord
         return Sud
-    elseif side==West
+    elseif side == West
         return Ost
-    elseif side==Sud
+    elseif side == Sud
         return Nord
-    elseif side==Ost
+    elseif side == Ost
         return West
     end
 end
 
 function along!(r,side)
     c=0
-    while !isborder(r)
+    while !isborder(r,side)
         putmarker!(r)
         move!(r,side) 
         c+=1       
@@ -35,18 +43,9 @@ function along!(r,side)
     return c
 end
 
-function num_steps_along!(r,side)
-    num_steps =0
-    while !isborder(r)
-        move!(r,side)
-        num_steps +=1
-    end
-    return num_steps
-end
-
 function along!(r,side,num_steps)
     for _ in 1:num_steps
         move!(r,side)
+    end
 end
-
 
