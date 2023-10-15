@@ -1,0 +1,26 @@
+using HorizonSideRobots
+
+function Task№2(r)
+    move_to_angle!(r)
+    mark_perimeter!(r)
+end
+
+function move_to_angle!(r)
+    count=0
+    side=West
+    while along!(r,side)
+        count +=1 
+    end
+
+    side=Sud
+    while along!(r,side)
+        count +=1 
+    end
+    return count
+end
+
+function along!(r,side) 
+    while !isborder(r,side)
+        move!(r,side)        
+    end
+end
