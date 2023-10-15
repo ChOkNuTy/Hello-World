@@ -1,14 +1,14 @@
 using HorizonSideRobots
 
 function along!(r,side)
-    while !isborder(r)
+    while !isborder(r,side)
         move!(r,side)        
     end
 end
 
 function num_steps_along!(r,side)
     num_steps =0
-    while !isborder(r)
+    while !isborder(r,side)
         move!(r,side)
         num_steps +=1
     end
