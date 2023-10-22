@@ -1,10 +1,14 @@
 using HorizonSideRobots
 
-function along!(r,side)
+# Эта функция заставляет робота двигаться до первой перегородки на его пути // Ну или проще говоря двигаться до упора
+function along!(r,side) 
     while !isborder(r,side)
         move!(r,side)        
     end
 end
+
+
+#ФУНКЦИЯ try_move!(robot, direct)::Bool делает попытку одного шага в заданном направлении и возвращает true, в случае, если это возможно, и false - в противном случае (робот остается в исходном положении) 
 
 function num_steps_along!(r,side)
     num_steps =0
@@ -15,19 +19,66 @@ function num_steps_along!(r,side)
     return num_steps
 end
 
+#ФУНКЦИЯ along!(robot, direct, num_steps)::Nothing перемещает робота в заданном направлении на заданное число шагов (предполагается, что это возможно)
 function along!(r,side,num_steps)
     for _ in 1:num_steps
         move!(r,side)
+    end
+    return num_steps
 end
 
+#ФУНКЦИЯ inverse(side::HorizonSide)::HorizonSide возвращает направление, противоположное заданному  
 function inverse(side::HorizonSide)::HorizonSide
-    if side==Nord
-        return Sud
-    elseif side==West
-        return Ost
-    elseif side==Sud
-        return Nord
-    elseif side==Ost
-        return West
+    HorizonSide(mod(Int(side)+2, 4))
+end
+
+#ФУНКЦИЯ right(side::HorizonSide)::HorizonSid возвращает направление, следующее по часовой стрелке по отношению к заданному
+function right(side::HorizonSide)::HorizonSide
+    HorizonSide(mod(Int(side)-1,4))
+end
+
+#ФУНКЦИЯ left(side::HorizonSide)::HorizonSide возвращает направление, следующее против часовой стрелки по отношению к заданному
+function left(side::HorizonSide)::HorizonSide
+    HorizonSide(mod(Int(side)+1,4))
+end
+
+#ФУНКЦИЯ try_move!(robot, direct)::Bool делает попытку одного шага в заданном направлении и возвращает true, в случае, если это возможно, и false - в противном случае (робот остается в исходном положении)
+function try_move!(r,side)::Bool
+    if isborder(r,side)
+        return false
     end
+    move!(r,side)
+    return true
+end
+
+#ФУНКЦИЯ try_move!(robot, direct)::Bool записанная другми образом
+function try_move!(r,side)::Bool
+    if !isborder(r,side) &&
+        begin
+           move!(r,side); return true 
+        end
+        false
+    end
+end
+
+function along!(r,side)::Nothing
+    while try_move!(r,side)
+    end
+end
+
+function numsteps_along!(robot, direct)::Integer
+    num_steps = 0
+    while try_move!(robot, direct)
+        num_steps += 1
+    end
+    return num_steps
+end
+
+function numsteps_along!(robot, direct, max_num_steps)::Int
+num_steps = 0
+while num_steps<max_num_steps && try_move!(robot,direct) 
+#- здесь принципиально, что операция && является “ленивой”
+num_steps +=1
+end
+return num_steps
 end
