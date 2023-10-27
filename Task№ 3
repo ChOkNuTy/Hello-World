@@ -1,0 +1,39 @@
+using HorizonSideRobots
+
+function Task№3!(r)
+    snake!(r)
+end
+
+
+function try_move!(r,side)::Bool
+    if isborder(r,side)
+        return false
+    end
+    move!(r,side)
+    return true
+end
+
+function along!(r,side)::Nothing
+    while try_move!(r,side)    
+    end
+end
+
+function numsteps_along!(r,side)
+    num_steps=0
+    while try_move!(r,side)
+        num_steps+=1
+    end
+    return num_steps
+end
+
+function numsteps_along!(r,side,max_num_stesp)
+    num_stesp=0
+    while num_stesp < max_num_stesp && try_move!(r,side)
+        num_stesp+=1
+    end
+    return num_stesp
+end
+
+function snake!(r)
+
+end
