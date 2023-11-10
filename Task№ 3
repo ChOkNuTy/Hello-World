@@ -1,31 +1,4 @@
 using HorizonSideRobots
-
-function Task№3!(r)
-    snake!(r)
-end
-
-
-function try_move!(r,side)::Bool
-    if isborder(r,side)
-        return false
-    end
-    move!(r,side)
-    return true
-end
-
-function along!(r,side)::Nothing
-    while try_move!(r,side)    
-    end
-end
-
-function numsteps_along!(r,side)
-    num_steps=0
-    while try_move!(r,side)
-        num_steps+=1
-    end
-    return num_steps
-end
-
 function numsteps_along!(r,side,max_num_stesp)
     num_stesp=0
     while num_stesp < max_num_stesp && try_move!(r,side)
@@ -34,6 +7,28 @@ function numsteps_along!(r,side,max_num_stesp)
     return num_stesp
 end
 
-function snake!(r)
+function try_move(r,side)::Bool
+    if isborder(r,side)
+        return false
+    end
+    move!(r,side)
+    return true
+end
 
+function snake!(r)
+    while true
+        putmarker!(r)
+        side=Ost
+        if !try_move!(r,side) break end
+        HorizonSide(mod(Int(side)+1,4))
+        move!(r,side)
+    end
+        
+    end
+        while true
+        putmarker!(r)
+        if !try_move!(r,side) break end
+    end
+    side=Nord
+    move!(r,side)
 end
