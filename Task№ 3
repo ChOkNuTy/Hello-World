@@ -1,4 +1,5 @@
 using HorizonSideRobots
+
 function numsteps_along!(r,side,max_num_stesp)
     num_stesp=0
     while num_stesp < max_num_stesp && try_move!(r,side)
@@ -7,7 +8,7 @@ function numsteps_along!(r,side,max_num_stesp)
     return num_stesp
 end
 
-function try_move(r,side)::Bool
+function try_move!(r,side)::Bool
     if isborder(r,side)
         return false
     end
@@ -15,20 +16,51 @@ function try_move(r,side)::Bool
     return true
 end
 
-function snake!(r)
-    while true
-        putmarker!(r)
-        side=Ost
-        if !try_move!(r,side) break end
-        HorizonSide(mod(Int(side)+1,4))
+function left(side::HorizonSide)::HorizonSide
+    HorizonSide(mod(Int(side)+1,4))
+end
+
+function right(side::HorizonSide)::HorizonSide
+    HorizonSide(mod(Int(side)-1,4))
+end
+
+function along!(r,side,num_steps)
+    for _ = 1:num_steps
         move!(r,side)
     end
-        
+end
+
+function numsteps_along!(r, side)::Integer
+    num_steps = 0
+    while try_move!(r, side)
+        num_steps += 1
     end
+    return num_steps
+end
+
+function snake!(r)
+    num_steps1=numsteps_along!(r,West)
+    num_steps2=numsteps_along!(r,Sud)
+    while !isborder(r,Nord) && !isborder(r,Ost)
         while true
-        putmarker!(r)
-        if !try_move!(r,side) break end
+            side=Ost
+            if !try_move!(r,side) break end
+            if try_move!(r,side) == false
+                side=left(side)
+                try_move!(r,side)
+            end
+        end
+        while true
+            side=West
+            if !try_move!(r,side) break end
+            if try_move!(r,side) == false
+                side=right(side)
+                try_move!(r,side)
+            end
+        end
     end
-    side=Nord
-    move!(r,side)
+    side=inverse(Sud)
+    along!(r,side,num_steps1)
+    side=inverse(West)
+    along!(r,side,num_steps2)
 end
