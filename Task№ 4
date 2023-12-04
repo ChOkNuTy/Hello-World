@@ -1,1 +1,34 @@
+using HorizonSideRobots
 
+function Task№4(r)
+    go_to_other_side(r)
+    putmarker!(r)
+    while go_to_other_side_and_back(r) == false
+        move(r,Nord)
+        putmarker!(r)
+    end
+end
+
+function go_to_other_side(r)
+    while true
+        side=Ost
+        if !try_move!(r,side) break end
+        if try_move!(r,side) == false
+            side=left(side)
+            try_move!(r,side)
+        end
+    end
+end
+
+function go_to_other_side_and_back(r)::Bool
+    if while true
+        while true
+            if !try_move!(r,West) break end
+        end
+        while true
+            if !try_move!(r,Ost) break end
+        end
+        return true
+    end
+    false
+end
