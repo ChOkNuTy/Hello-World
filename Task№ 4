@@ -1,11 +1,13 @@
 using HorizonSideRobots
 
 function Task№4(r)
-    go_to_other_side(r)
-    putmarker!(r)
-    while go_to_other_side_and_back(r) == false
-        move(r,Nord)
+    if !isborder(r,Nord)
+        go_to_other_side(r)
         putmarker!(r)
+        while go_to_other_side_and_back(r) == false
+            move!(r,Nord)
+            putmarker!(r)
+        end
     end
 end
 
