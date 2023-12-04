@@ -77,7 +77,7 @@ end
 function numsteps_along!(robot, direct, max_num_steps)::Int
 num_steps = 0
 while num_steps<max_num_steps && try_move!(robot,direct) 
-#- здесь принципиально, что операция && является “ленивой”
+#- здесь принципиально, что операция && является “ленивой”(если выполняется хотя бы 1 из условий, то другое ингорируется)
 num_steps +=1
 end
 return num_steps
