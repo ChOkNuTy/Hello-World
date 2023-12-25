@@ -1,0 +1,69 @@
+include("../sample.jl")
+r = Robot("untitled.sit",animate = true)
+
+function movenrotatecheck!(r,side::HorizonSide,sidesec::HorizonSide, way::Bool)
+    p = []
+    k = 0
+    while !isborder(r,side)
+        if isborder(r,sidesec)
+            k = 1
+            putmarker!(r)
+        end
+        c = movestep!(r,side,false,way)
+        push!(p,c)
+    end
+    c = movestep!(r,sidesec,false,way)
+    push!(p,c)
+    return [p,k]
+end
+
+function f()
+    back = []
+    trig = 0
+    t = 2
+    c = longsteps!(r,[West,Sud,West],false,true)
+    back = listtolist!(back,c)
+    side = 3
+    sidesec = 0
+
+    for j in range(0,1,4)
+        trig = 0
+        t = 2
+        while trig == 0
+            if mod(t,2)==0
+                c,trig = movenrotatecheck!(r,HorizonSide(mod(side,4)),HorizonSide(mod(sidesec,4)),true)
+            else
+                c,trig = movenrotatecheck!(r,HorizonSide(mod(side+2,4)),HorizonSide(mod(sidesec,4)),true)
+            end
+            println(trig)
+            back = listtolist!(back,c)
+            t+=1
+        end
+        c = tocorner!(r,HorizonSide(mod(side+2,4)),true,false,true)
+        back = listtolist!(back,c)
+        side+=1
+        sidesec+=1
+    end
+    c = longsteps!(r,[Sud,Ost,Nord,West,Sud],true,true)
+    back = listtolist!(back,c)
+
+    back = listreverse!(back)
+    back = listinverse!(back)
+    shortsteps!(r,back,false,false)
+
+end
+f()
+
+frame_size:
+12 11
+coefficient:
+1.0
+is_framed:
+true
+robot_position:
+9 3
+temperature_map:
+96 -146 47 91 364 -197 270 -150 -49 287 200 422 486 488 -124 310 -249 326 -109 378 84 420 -210 199 -168 17 494 78 499 395 283 -244 106 340 393 -168 224 -149 373 467 185 -20 50 129 336 -119 263 -192 -221 358 -177 57 225 -266 277 -228 100 475 -214 189 356 360 -160 -107 280 -47 -17 -209 288 229 213 117 -220 -228 278 7 -91 295 36 312 -142 -220 -74 -40 16 -44 -225 45 -57 -43 -135 -234 200 27 199 286 472 -128 22 383 124 464 -44 443 -42 -16 445 440 -161 -183 62 93 131 103 -200 123 124 261 139 232 311 283 257 -18 307 183 -39 243 382 252 430 375
+markers_map:
+
+borders_map:
